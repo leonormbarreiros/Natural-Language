@@ -62,7 +62,6 @@ trains, tests = train_test_split(df, test_size=0.1, random_state=25)
 # # # #
 # 4. Classify testing data
 # # # #
-
 y_pred = []
 y_true = []
 
