@@ -8,26 +8,23 @@ from nltk.stem import WordNetLemmatizer
 import nltk
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
 import numpy as np
 import pandas as pd
 
-def good_bad_adjectives(features, labels):
+def bad_adjectives(features, labels):
     tags = [nltk.pos_tag(feature) for feature in features]
     
-    good, bad = [], []
+    bad = []
     n_features = len(features)
     for i in range(n_features):
         for elm in tags[i]:
             if elm[1] in ('JJ', 'JJR', 'JJS'):
-                if labels[i] in ('=Good=', '=VeryGood=', '=Excellent='):
-                    good.append(elm[0])
-                elif labels[i] in ('=Poor=', '=Unsatisfactory='):
+                if labels[i] in ('=Poor=', '=Unsatisfactory='):
                     bad.append(elm[0])
-                else:
-                    print("ERROR")
-    return good, bad
+    return bad
 
 # # # #
 # 1. Get train and test sets' files
@@ -107,27 +104,21 @@ features = [ [wordnet_lemmatizer.lemmatize(word) for word in feature] for featur
 features_before = deepcopy(features)
 
 train_features = [ [wordnet_lemmatizer.lemmatize(word) for word in feature] for feature in train_features]
+train_features_before = deepcopy(train_features)
 
-# 4.4 Stop Words Removal
-
-stop_words = set(stopwords.words('english')) # funcao
-
+# Intermediate step: re-constitute the strings
 n_documents = len(features)
 for i in range(n_documents):
-    features[i] = [w for w in features[i] if not w in stop_words]
     s = ""
     for el in features[i]:
         s += el + " "
     features[i] = s[:-1]
 
-n_t_documents = len(train_features)
-for i in range(n_t_documents):
-    train_features[i] = [w for w in train_features[i] if not w in stop_words]
-
 # # # #
 # 5. Prepare features for naive bayes model
 # # # #
 
+#count_vectorizer = TfidfVectorizer()
 count_vectorizer = CountVectorizer()
 counts_matrix    = count_vectorizer.fit_transform(features)
 doc_term_matrix  = counts_matrix.todense()
@@ -166,6 +157,19 @@ print(list_of_good)
 '''   
 
 # 5.3 Number of "negative" adjectives
+'''
+bad = bad_adjectives(train_features_before, train_labels)
+print(bad)
+list_of_bad = []
+for i in range(n_documents):
+    n_bad = 0
+    for elm in tags[i]:
+        if elm[0] in bad:
+            n_bad += 1
+    list_of_bad.append(n_bad)
+
+df['N_bad'] = list_of_bad
+'''
 
 # 5.4 Presence of negative words (no, not, n't)
 tags = [nltk.pos_tag(feature) for feature in features_before]
@@ -241,11 +245,11 @@ df['N_doub'] = list_of_doub
 # 7. Learn model
 # # # #
 
-model = MultinomialNB().fit(df.loc[0:8999], train_labels)
+model = MultinomialNB().fit(df.loc[0:7999], train_labels)
 
 # # # #
 # 8. Predict test labels
 # # # #
-y_pred = model.predict(df.loc[9000:9999])
+y_pred = model.predict(df.loc[8000:9999])
 
 print('Accuracy:', accuracy_score(test_labels, y_pred))

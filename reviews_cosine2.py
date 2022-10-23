@@ -16,6 +16,7 @@ import json
 import numpy as np
 from numpy.linalg import norm
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # # # #
@@ -121,9 +122,9 @@ df = pd.DataFrame(doc_term_matrix)
 y_pred = []
 y_true = []
 
-for i in range(9000, n_documents):
+for i in range(8000, n_documents):
     cosine = {'=Poor=': [0,0], '=Unsatisfactory=': [0,0], '=Good=': [0,0], '=VeryGood=': [0,0], '=Excellent=': [0,0]}
-    for j in range(0, 9000):
+    for j in range(0, 8000):
         cosine[labels[j]][0] += cosine_similarity_matrix[i][j]
         cosine[labels[j]][1] += 1
     
