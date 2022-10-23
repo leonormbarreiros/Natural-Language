@@ -98,5 +98,7 @@ for test_index, test_row in tests.iterrows():
     
     y_pred.append(max(cosine, key=cosine.get))
     y_true.append(test_row["Labels"])
+
+    print(max(cosine, key=cosine.get))
     
 print(accuracy_score(y_true, y_pred))

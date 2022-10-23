@@ -106,8 +106,6 @@ count_vectorizer = CountVectorizer()
 counts_matrix   = count_vectorizer.fit_transform(features)
 doc_term_matrix = counts_matrix.todense()
 
-print(np.array(doc_term_matrix))
-
 # # # #
 # 6. Learn model
 # # # #

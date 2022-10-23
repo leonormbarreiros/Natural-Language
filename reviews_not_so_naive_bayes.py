@@ -110,7 +110,7 @@ train_features = [ [wordnet_lemmatizer.lemmatize(word) for word in feature] for 
 
 # 4.4 Stop Words Removal
 
-stop_words = set(stopwords.words('english'))
+stop_words = set(stopwords.words('english')) # funcao
 
 n_documents = len(features)
 for i in range(n_documents):

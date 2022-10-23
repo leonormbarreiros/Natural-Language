@@ -2,6 +2,7 @@
 # 2nd model: classify according to cosine similarity
 # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+from copy import deepcopy
 import sys
 from math import log
 from traceback import print_tb
@@ -88,6 +89,7 @@ features = [nltk.word_tokenize(feature) for feature in features]
 # 4.3 Lemmatization
 wordnet_lemmatizer = WordNetLemmatizer()
 features = [ [wordnet_lemmatizer.lemmatize(word) for word in feature] for feature in features]
+features_before = deepcopy(features)
 
 # 4.4 Stop Words Removal
 
@@ -109,6 +111,8 @@ count_vectorizer = CountVectorizer()
 counts_matrix = count_vectorizer.fit_transform(features)
 doc_term_matrix = counts_matrix.todense()
 cosine_similarity_matrix = cosine_similarity(counts_matrix)
+
+df = pd.DataFrame(doc_term_matrix)
 
 # # # #
 # 6. Classify testing data

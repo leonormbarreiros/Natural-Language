@@ -24,7 +24,13 @@ df = pd.DataFrame(data=d)
 
 training_data, testing_data = train_test_split(df, test_size=0.1, random_state=25)
 
-print(f"No. of training examples: {training_data.shape[0]}")
-print(f"No. of testing examples: {testing_data.shape[0]}")
+# create tests file
+for test_index, test_row in testing_data.iterrows():
+    #feature = test_row["Features"]
+    #print(feature)
+    label = test_row["Labels"]
+    print(label)
 
-print(testing_data)
+# create auxiliary trains file
+#for train_index, train_row in training_data.iterrows():
+#    print(lines[train_index][:-1])
