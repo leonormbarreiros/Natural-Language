@@ -78,7 +78,7 @@ df = pd.DataFrame(doc_term_matrix)
 
 # 1.1.1 Number of adjectives
 d["Features"] = [nltk.word_tokenize(feature) for feature in d["Features"]]
-tags = [nltk.pos_tag(feature) for feature in d["Features"]]
+""" tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_adjectives = []
 for i in range(10000):
     n_adjectives = 0
@@ -87,7 +87,7 @@ for i in range(10000):
             n_adjectives += 1
     list_of_adjectives.append(n_adjectives)
 
-df['N_adj'] = list_of_adjectives
+df['N_adj'] = list_of_adjectives """
 
 # 1.1.2 Negative words
 #d["Features"] = [nltk.word_tokenize(feature) for feature in d["Features"]]
@@ -139,7 +139,7 @@ for i in range(10000):
 df['N_int'] = list_of_interrogations
 
 # 1.1.6 :-(
-""" tags = [nltk.pos_tag(feature) for feature in d["Features"]]
+tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_big_sad = []
 for i in range(10000):
     n_big_sad = 0
@@ -153,7 +153,7 @@ for i in range(10000):
             print("OK")
     list_of_big_sad.append(n_big_sad)
 
-df['N_big_sad'] = list_of_big_sad  """  
+df['N_big_sad'] = list_of_big_sad   
 
 # 1.1.7 :)
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]
