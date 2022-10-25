@@ -28,7 +28,7 @@ df = pd.DataFrame(data=d)
 # # # #
 # 2. Split into training and testing sets
 # # # #
-training_data, testing_data = train_test_split(df, test_size=0.2, random_state=21)
+training_data, testing_data = train_test_split(df, test_size=0.2, random_state=42)
 
 # # # #
 # 3. Save training set
