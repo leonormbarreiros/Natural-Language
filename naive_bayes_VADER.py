@@ -123,7 +123,7 @@ for i in range(10000):
 df['N_rets'] = list_of_rets
 
 # 1.1.5 "?"
-tags = [nltk.pos_tag(feature) for feature in d["Features"]]
+""" tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_interrogations = []
 for i in range(10000):
     n_interrogations = 0
@@ -132,7 +132,7 @@ for i in range(10000):
             n_interrogations += 1
     list_of_interrogations.append(n_interrogations)
 
-df['N_int'] = list_of_interrogations
+df['N_int'] = list_of_interrogations """
 
 # 1.1.6 :-(
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]
@@ -184,7 +184,7 @@ for i in range(10000):
 df['N_sad'] = list_of_sad
 
 # 1.1.9 Number of positive words and Number of negative words
-""" list_of_positives = []
+list_of_positives = []
 list_of_negatives = []
 list_of_neutrals = []
 for s in d["Features"]:
@@ -208,7 +208,7 @@ for s in d["Features"]:
 
 df['N_positives'] = list_of_positives
 df['N_negatives'] = list_of_negatives
-df['N_neutrals'] = list_of_neutrals  """
+df['N_neutrals'] = list_of_neutrals 
 
 # 1.1.9 Positive sentence or Negative sentence?
 sentences = []
