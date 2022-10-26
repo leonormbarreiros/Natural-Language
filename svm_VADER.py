@@ -4,12 +4,11 @@
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from nltk.stem import WordNetLemmatizer
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import nltk
 
 d = { "Features" : [], "Length": [] }
@@ -48,19 +47,21 @@ for i in range(2000):
     feature = lines_features[i][:-1]
     test_labels["Labels"].append(label)
     d["Features"].append(feature.lower()) # lowercasing
+
+'''
 # # # #
 # 1.1 Pre-process the dataset
 # # # #
-"""
 d["Features"] = [nltk.word_tokenize(feature) for feature in d["Features"]]
 wordnet_lemmatizer = WordNetLemmatizer()
 d["Features"] = [ [wordnet_lemmatizer.lemmatize(word) for word in feature] for feature in d["Features"]]
+
 for i in range(10000):
     s = ""
     for el in d["Features"][i]:
         s += el + " "
     d["Features"][i] = s[:-1]
-"""
+'''    
 count_vectorizer = CountVectorizer()
 #count_vectorizer = TfidfVectorizer()
 counts_matrix    = count_vectorizer.fit_transform(d["Features"])
@@ -72,7 +73,7 @@ df = pd.DataFrame(doc_term_matrix)
 # # # #
 # 1.1 Extra features
 # # # #
-
+'''
 # 1.1.1 Number of adjectives
 d["Features"] = [nltk.word_tokenize(feature) for feature in d["Features"]]
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]
@@ -85,8 +86,10 @@ for i in range(10000):
     list_of_adjectives.append(n_adjectives)
 
 df['N_adj'] = list_of_adjectives
-
+'''
+'''
 # 1.1.2 Negative words
+d["Features"] = [nltk.word_tokenize(feature) for feature in d["Features"]]
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_negatives = []
 for i in range(10000):
@@ -97,9 +100,11 @@ for i in range(10000):
     list_of_negatives.append(negative)
 
 df['Neg?'] = list_of_negatives
+'''
 
-#1.1.3 Exclamation marks
-""" tags = [nltk.pos_tag(feature) for feature in d["Features"]]
+# 1.1.3 Exclamation marks
+d["Features"] = [nltk.word_tokenize(feature) for feature in d["Features"]]
+tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_exclamations = []
 for i in range(10000):
     n_exclamations = 0
@@ -108,9 +113,9 @@ for i in range(10000):
             n_exclamations += 1
     list_of_exclamations.append(n_exclamations)
 
-df['N_exl'] = list_of_exclamations """
+df['N_exl'] = list_of_exclamations
 
-# 1.1.4 "...""
+# 1.1.4 "..."
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_rets = []
 for i in range(10000):
@@ -122,6 +127,7 @@ for i in range(10000):
 
 df['N_rets'] = list_of_rets
 
+'''
 # 1.1.5 "?"
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_interrogations = []
@@ -133,6 +139,7 @@ for i in range(10000):
     list_of_interrogations.append(n_interrogations)
 
 df['N_int'] = list_of_interrogations
+'''
 
 # 1.1.6 :-(
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]
@@ -146,11 +153,12 @@ for i in range(10000):
         #porque o segundo elemneto não é "."
         if elm == (':', ':') and elm_next == ('-', ':') and elm_next_next == ('(', '('):
             n_big_sad += 1
-            #print("OK")
+            print("OK")
     list_of_big_sad.append(n_big_sad)
 
 df['N_big_sad'] = list_of_big_sad   
 
+'''
 # 1.1.7 :)
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_smile = []
@@ -161,12 +169,13 @@ for i in range(10000):
         elm_next = tags[i][j + 1]
         #porque o segundo elemneto não é "."
         if elm == (':', ':') and elm_next == (')', ')'):
-            #print("OK")
+            print("OK")
             n_smile += 1
     list_of_smile.append(n_smile)
 
 df['N_smile'] = list_of_smile
-
+'''
+'''
 # 1.1.8 :(
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_sad = []
@@ -177,11 +186,13 @@ for i in range(10000):
         elm_next = tags[i][j + 1]
         #porque o segundo elemneto não é "."
         if elm == (':', ':') and elm_next == ('(', '('):
-            #print("OK")
+            print("OK")
             n_sad += 1
     list_of_sad.append(n_sad)
 
 df['N_sad'] = list_of_sad
+'''
+
 
 # 1.1.9 Number of positive words and Number of negative words
 list_of_positives = []
@@ -210,6 +221,7 @@ df['N_positives'] = list_of_positives
 df['N_negatives'] = list_of_negatives
 df['N_neutrals'] = list_of_neutrals 
 
+
 # 1.1.9 Positive sentence or Negative sentence?
 sentences = []
 list_of_positive = []
@@ -229,14 +241,25 @@ for s in d["Features"]:
 df['N_positive'] = list_of_positive
 df['N_negative'] = list_of_negative
 
+
 # # # #
 # 2. Initialize classifier
 # # # #
 pipeline = Pipeline(
     [
-        ('clf', MultinomialNB()),
+        ('clf', SGDClassifier(
+            loss='hinge',
+            penalty='l2',
+            alpha=1e-3,
+            random_state=42,
+            max_iter=100,
+            learning_rate='optimal',
+            tol=None
+        )),
     ]
 )
+
+#print(df.loc[8000:9999])
 
 learner = pipeline.fit(df.loc[0:7999], train_labels['Labels'])
 
