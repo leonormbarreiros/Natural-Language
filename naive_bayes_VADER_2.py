@@ -152,7 +152,7 @@ for i in range(10000):
 df['N_big_sad'] = list_of_big_sad   
 
 # 1.1.7 :)
-tags = [nltk.pos_tag(feature) for feature in d["Features"]]
+""" tags = [nltk.pos_tag(feature) for feature in d["Features"]]
 list_of_smile = []
 for i in range(10000):
     n_smile = 0
@@ -165,7 +165,7 @@ for i in range(10000):
             n_smile += 1
     list_of_smile.append(n_smile)
 
-df['N_smile'] = list_of_smile
+df['N_smile'] = list_of_smile """
 
 # 1.1.8 :(
 tags = [nltk.pos_tag(feature) for feature in d["Features"]]

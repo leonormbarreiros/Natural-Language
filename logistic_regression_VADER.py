@@ -197,13 +197,10 @@ for s in d["Features"]:
     for w in s:
         sentiment_dict = SentimentIntensityAnalyzer().polarity_scores(w)
         if sentiment_dict['compound'] >= 0.05:
-            print(w + " -> positive\n")
             n_positive += 1
         elif sentiment_dict['compound'] <= - 0.05:
-            print(w + " -> negative\n")
             n_negative += 1
         else:
-            print(w + " -> neutral")
             n_neutral += 1
     list_of_positives.append(n_positive)
     list_of_negatives.append(n_negative)
@@ -225,10 +222,8 @@ for s in d["Features"]:
     list_of_positive.append(0)
     sentiment_dict = SentimentIntensityAnalyzer().polarity_scores(' '.join(s))
     if sentiment_dict['compound'] >= 0.05:
-        #print(' '.join(s)+ " -> positive\n")
         list_of_positive[-1] = 1
     elif sentiment_dict['compound'] <= - 0.05:
-        #print(' '.join(s) + " -> negative\n")
         list_of_negative[-1] = 1
 df['N_positive'] = list_of_positive
 df['N_negative'] = list_of_negative
