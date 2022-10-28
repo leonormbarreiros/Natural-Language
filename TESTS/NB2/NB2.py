@@ -252,7 +252,7 @@ actual = test_labels['Labels']
 predicted = y_pred
 labels=['Poor', 'Unsatisfactory', 'Good', 'VeryGood', 'Excellent']
 
-confusion_matrix = metrics.confusion_matrix(actual, predicted)
+confusion_matrix = metrics.confusion_matrix(actual, predicted, labels=['=Poor=', '=Unsatisfactory=', '=Good=', '=VeryGood=', '=Excellent='])
 cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix=confusion_matrix, display_labels=labels)
 
 cm_display.plot()
