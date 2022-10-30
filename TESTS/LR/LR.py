@@ -243,6 +243,10 @@ learner = pipeline.fit(df.loc[0:7999], train_labels['Labels'])
 # # # #
 y_pred = learner.predict(df.loc[8000:9999])
 
+for pred in y_pred:
+    print(pred)
+
+'''    
 # # # #
 # 4. Evaluate performance
 # # # #
@@ -313,6 +317,7 @@ for i in range(2000):
         else:
             print('ERROR')
 
+'''
 '''
 Accuracy: 0.496
 Poor Accuracy:  0.6556122448979592
